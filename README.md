@@ -1,11 +1,17 @@
 React Native Auto Align ScrollView
 ====
 
+[![npm](https://img.shields.io/npm/v/react-native-auto-align-scrollview.svg?style=flat-square)](https://www.npmjs.com/package/react-native-auto-align-scrollview)
+
+
 `react-native-auto-align-scrollview` is used to create simple auto align list view, such as data picker,  data selector. You can also try use it in content list view, to the content always align to the center of list.
 
 # Demo
-
+![2018-04-18 23.31.17](https://github.com/yanqiw/react-native-auto-align-scrollview/blob/master/docs/2018-04-18%2023.31.17.gif?raw=true)
 # Installation
+```bash
+npm install --save react-native-auto-align-scrollview
+```
 
 # How to use it
 
