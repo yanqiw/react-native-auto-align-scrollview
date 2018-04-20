@@ -18,6 +18,7 @@ npm install --save react-native-auto-align-scrollview
 ### Wrap the item by `Ancher`
 
 Wrap the item which need to be focused.
+
 |  props | type | usage |
 |---|---|---|
 |  focus | boolean | the init focus item. (option) |
