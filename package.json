@@ -1,6 +1,6 @@
 {
   "name": "react-native-auto-align-scrollview",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "a auto align scrollview for react-native",
   "main": "index.js",
   "scripts": {
