@@ -1,17 +1,21 @@
 import React, {Component, PureComponent} from 'react';
 import { ScrollView, View, Text } from 'react-native';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
+let ALERT_MSG = '';
+const _alert = (msg)=>{
+	// dev debug
+	// console.info(msg)
+
+	// prod debug
+	// ALERT_MSG = ALERT_MSG + '\n' + msg;
+	// alert(ALERT_MSG)
+}
 
 export class Anchor extends PureComponent {
-	name="Anchor"
 	render(){
 		return (
-			<View
-			  ref={(v)=>this.itemWapper=v}
-			>
-				{this.props.children}
-			</View>
+				this.props.children
 		)
 	}
 }
@@ -21,6 +25,7 @@ class AnchorItemWrapper extends PureComponent{
 		const anchorOffset = this.props.scrollViewLayoutHeight/2;
 		const itemsOffset = event.nativeEvent.layout.height/2;
 		const top = event.nativeEvent.layout.y - anchorOffset + itemsOffset;
+		_alert(`AnchorItemWrapper._handleLayout: Y ${event.nativeEvent.layout.y}, anchorOffset ${anchorOffset}, itemOffset ${itemsOffset}, top ${top}`)
 		this.props.setAnchors(top);
 		this.props.setItems(top, this.props.children);
 		if(this.props.children.props.focus){
@@ -72,7 +77,8 @@ class	AnchorItemWrappedList extends Component{
 					</AnchorItemWrappedList>
 				);
 			}else{
-				if(child.type && child.type.name === "Anchor"){
+				_alert(`AnchorItemWrapperList.child: ${child}/${child.type}/${child.type.name}/${child.type.displayName}`)
+				// if(child.type && child.type.displayName && child.type.displayName === "Anchor"){
 					res.push(
 						<AnchorItemWrapper
 				      key={`aiw${this.props.prefix}_${index}`}
@@ -84,9 +90,9 @@ class	AnchorItemWrappedList extends Component{
 						{child}
 						</AnchorItemWrapper>
 					);
-				}else{
-					res.push(child) ;
-				}
+				// }else{
+				// 	res.push(child) ;
+				// }
 			}
 		}
 		return res;
@@ -111,6 +117,7 @@ class AutoAlignScrollView extends Component {
 		this.anchors=[];
 		this.items={};
 		this.childrenLayoutHeight=0;
+		// this.scrollViewLayoutHeight=0;
 		this.initMove=0
 		this.state={
 			wrappedItem:null,
@@ -127,6 +134,7 @@ class AutoAlignScrollView extends Component {
 			const focusedItem = {};
 			const move = this.anchors.reduce((sum, anchro, index)=>{
 				const diff = anchro - offsetY;
+				_alert(`_calAlign ${anchro} to ${offsetY} is ${diff} and sum is ${sum}, index ${index}`)
 				if( Math.abs(sum) < Math.abs(diff)){
 					return sum;
 				}else{
@@ -150,13 +158,15 @@ class AutoAlignScrollView extends Component {
 				ref={(sv) => this.sv=sv}
 				onLayout={(event)=>{
 					// this.scrollViewLayoutHeight=event.nativeEvent.layout.height;
+					_alert(`onlayout ${event.nativeEvent.layout.height}`);
+					this.anchors=[];
 					this.setState({
 						// wrappedItem: this._anchorItemWapper.call(this,[this.props.children]),
 						scrollViewLayoutHeight: event.nativeEvent.layout.height
 					})
 				}}
 				onScrollEndDrag={(event)=>{
-					// console.info('scrolling end', event.nativeEvent.contentOffset.y);
+					_alert('scrolling end', event.nativeEvent.contentOffset.y);
 					const offsetY = event.nativeEvent.contentOffset.y;
 					const { move, focusedItem} = this._calAlign(offsetY);
 					const focusOn = offsetY + move;
@@ -167,11 +177,17 @@ class AutoAlignScrollView extends Component {
 				}}
 				{...this.props}
 			>
+				{/* <View
+					onLayout={(event)=>{
+							this.childrenLayoutHeight=event.nativeEvent.layout.height;
+					}}
+				> */}
+						{/* {this.state.wrappedItem} */}
 					<AnchorItemWrappedList
 					  prefix={''}
 						setAnchors={(y)=>this.anchors.push(y)}
 						setInitMove={(y)=>{
-							console.info('setInitMove',y);
+							_alert('setInitMove',y);
 							this.sv && this.sv.scrollTo({x: 0, y, animated: false});
 						}}
 						setItems={(y, anchro)=>this.items[y]=anchro}
@@ -182,6 +198,7 @@ class AutoAlignScrollView extends Component {
 					>
 						{this.props.children}
 					</AnchorItemWrappedList>
+				{/* </View> */}
 			</ScrollView>
 		)
 	}
